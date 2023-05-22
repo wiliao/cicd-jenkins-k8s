@@ -32,3 +32,4 @@ Check the intial password for user "root":
 
 Login and change the password for the first time.
 
+![screen-shot-login-gitlab](screen-shot/login-to-gitlab.png)

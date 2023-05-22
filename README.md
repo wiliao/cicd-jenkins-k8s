@@ -33,3 +33,32 @@ Check the intial password for user "root":
 Login and change the password for the first time.
 
 ![screen-shot-login-gitlab](screen-shot/login-to-gitlab.png)
+
+## 4. Install Jenkins
+
+    docker pull jenkins/jenkins:latest-jdk17
+
+    sudo mkdir /data/jenkins/
+    sudo nano /data/jenkins/docker-compose.yml
+
+## 5. Configure Jenkins
+
+    cd /var/run
+    sudo chown root:root docker.sock
+    sudo chmod o+rw docker.sock
+
+    cd /data/jenkins/
+    sudo mkdir /var/jenkins_home
+    docker-compose up -d
+    sudo chmod 777 data/
+    sudo docker logs -f jenkins
+
+ Jenkins initial setup is required. An admin user has been created and a password generated at /var/jenkins_home/secrets/initialAdminPassword
+
+![screen-shot-login-jenkins-01](screen-shot/jenkins-initial-page.png)
+
+![screen-shot-login-jenkins-02](screen-shot/jenkins-after-init-password.png)
+
+![screen-shot-login-jenkins-03](screen-shot/jenkins-getting-started.png)
+
+![screen-shot-login-jenkins-04](screen-shot/change-password.png)

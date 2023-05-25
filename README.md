@@ -22,6 +22,10 @@ Setup CI/CD with Jenkins on Docker Desktop
     cd /data/git
     docker-compose up -d
 
+Restart if needed:
+
+    docker-compose restart
+
 ## 3. Access Gitlab from Windows
 
     http://localhost:8929
@@ -69,7 +73,7 @@ If needed, reset gitlab in the following steps:
 
 Jenkins initial setup is required. An admin user has been created and a password generated at /var/jenkins_home/secrets/initialAdminPassword
 
-Access jenkins from http://localhost:8080
+By default, access jenkins from http://localhost:8080
 
 ![screen-shot-login-jenkins-01](screen-shot/jenkins-initial-page.png)
 
@@ -79,7 +83,7 @@ Access jenkins from http://localhost:8080
 
 ![screen-shot-login-jenkins-04](screen-shot/change-password.png)
 
-Modified compose/docker-compose-jenkins.yml to port from 8080 to 8090.
+Modified compose/docker-compose-jenkins.yml to port from 8080 to 8090. Access jenkins from http://localhost:8090.
 
 ## 6. Install Jenkins plugin "Publish Over SSH"
 
@@ -100,3 +104,16 @@ To
 Commit and push a local repository to the above remote repo:
 
 ![screen-shot-push-mytest](screen-shot/push-from-intellij.png)
+
+## 8. Create a docker network
+
+    docker network create devops-network
+    docker network inspect devops-network
+    docker network connect devops-network jenkins
+    docker network connect devops-network gitlab
+    docker container inspect gitlab
+    docker container inspect jenkins
+
+The containers can communicate with each other using Name or IPv4Address
+
+![screen-shot-publish-over-ssh](screen-shot/connect-jenkins-to-gitlab.png)

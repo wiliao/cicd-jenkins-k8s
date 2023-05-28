@@ -48,7 +48,7 @@ If needed, reset gitlab in the following steps:
     docker-compose up -d
     docker exec -it gitlab cat /etc/gitlab/initial_root_password
 
-## 4. Create a Freestyle project: mytest
+## 4. Create a Spring Boot project: mytest
 
 Rename
 
@@ -62,7 +62,7 @@ Commit and push a local repository to the above remote repo:
 
 ![screen-shot-push-mytest](screen-shot/push-from-intellij.png)
 
-## 4. Install Jenkins by customising official Jenkins Docker image
+## 5. Install Jenkins by customising official Jenkins Docker image
 
 Create Dockerfile jenkins/Dockerfile.
 Build a new docker image from this Dockerfile and assign the image a meaningful name, e.g. "myjenkins-blueocean:2.387.3-1":
@@ -71,7 +71,7 @@ Build a new docker image from this Dockerfile and assign the image a meaningful 
 
 Run your own myjenkins-blueocean:2.387.3-1 image as a container in Docker using the following command in jenkins/setup-jenkins-by-docker.txt.
 
-## 5. Configure Jenkins
+## 6. Configure Jenkins
 
 Jenkins initial setup is required. An admin user has been created and a password generated at /var/jenkins_home/secrets/initialAdminPassword
 
@@ -87,13 +87,13 @@ Access jenkins from http://localhost:8090
 
 Modified compose/docker-compose-jenkins.yml to port from 8080 to 8090. Access jenkins from http://localhost:8090.
 
-## 6. Install Jenkins plugin "Publish Over SSH"
+## 7. Install Jenkins plugin "Publish Over SSH"
 
 After install the plugin, confiured and tested as below:
 
 ![screen-shot-publish-over-ssh](screen-shot/test-publish-over-ssh.png)
 
-## 7. Create a docker network
+## 8. Create a docker network
 
     docker network create devops-network
     docker network inspect devops-network
@@ -103,18 +103,18 @@ After install the plugin, confiured and tested as below:
     docker container inspect jenkins-blueocean
 
 
-## 8. Create a Freestyle project "mybuild"
+## 9. Create a Freestyle project "mybuild"
 
 The containers can communicate with each other using Name or IPv4Address
 
 ![screen-shot-publish-over-ssh](screen-shot/connect-jenkins-to-gitlab.png)
 
-## 9. Access Jenkins container
+## 10. Access Jenkins container
 
     docker container exec -it jenkins-blueocean bash
 
 ![screen-shot-jenkins-docker-container](screen-shot/jenkins-docker-container.png)
 
-## 10. Run the build
+## 11. Run the build
 
 ![screen-shot-run-the-build](screen-shot/Screenshot-run-the-build.png)

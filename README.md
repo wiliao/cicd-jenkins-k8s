@@ -48,32 +48,34 @@ If needed, reset gitlab in the following steps:
     docker-compose up -d
     docker exec -it gitlab cat /etc/gitlab/initial_root_password
 
-## 4. Install Jenkins
+## 4. Create a Freestyle project: mytest
 
-    docker pull jenkins/jenkins:latest-jdk17
+Rename
 
-    sudo mkdir /data/jenkins/
-    sudo nano /data/jenkins/docker-compose.yml
+    http://172.22.217.132:8929/gitlab-instance-d53ee8df/mytest.git
+
+To
+
+    http://localhost:8929/gitlab-instance-d53ee8df/mytest.git
+
+Commit and push a local repository to the above remote repo:
+
+![screen-shot-push-mytest](screen-shot/push-from-intellij.png)
+
+## 4. Install Jenkins by customising official Jenkins Docker image
+
+Create Dockerfile jenkins/Dockerfile.
+Build a new docker image from this Dockerfile and assign the image a meaningful name, e.g. "myjenkins-blueocean:2.387.3-1":
+
+    docker build -t myjenkins-blueocean:2.387.3-1 .
+
+Run your own myjenkins-blueocean:2.387.3-1 image as a container in Docker using the following command in jenkins/setup-jenkins-by-docker.txt.
 
 ## 5. Configure Jenkins
 
-    cd /var/run
-    sudo chown root:root docker.sock
-    sudo chmod o+rw docker.sock
-
-    cd /data/jenkins/
-    sudo mkdir /var/jenkins_home
-    docker-compose up -d
-    sudo chmod 777 data/
-
-    # restart jenkins if needed
-    docker-compose restart
-
-    sudo docker logs -f jenkins
-
 Jenkins initial setup is required. An admin user has been created and a password generated at /var/jenkins_home/secrets/initialAdminPassword
 
-By default, access jenkins from http://localhost:8080
+Access jenkins from http://localhost:8090
 
 ![screen-shot-login-jenkins-01](screen-shot/jenkins-initial-page.png)
 
@@ -91,29 +93,28 @@ After install the plugin, confiured and tested as below:
 
 ![screen-shot-publish-over-ssh](screen-shot/test-publish-over-ssh.png)
 
-## 7. Create a GitLab project: mytest
-
-Rename
-
-    http://172.22.217.132:8929/gitlab-instance-d53ee8df/mytest.git
-
-To
-
-    http://localhost:8929/gitlab-instance-d53ee8df/mytest.git
-
-Commit and push a local repository to the above remote repo:
-
-![screen-shot-push-mytest](screen-shot/push-from-intellij.png)
-
-## 8. Create a docker network
+## 7. Create a docker network
 
     docker network create devops-network
     docker network inspect devops-network
-    docker network connect devops-network jenkins
+    docker network connect devops-network jenkins-blueocean
     docker network connect devops-network gitlab
     docker container inspect gitlab
-    docker container inspect jenkins
+    docker container inspect jenkins-blueocean
+
+
+## 8. Create a Freestyle project "mybuild"
 
 The containers can communicate with each other using Name or IPv4Address
 
 ![screen-shot-publish-over-ssh](screen-shot/connect-jenkins-to-gitlab.png)
+
+## 9. Access Jenkins container
+
+    docker container exec -it jenkins-blueocean bash
+
+![screen-shot-jenkins-docker-container](screen-shot/jenkins-docker-container.png)
+
+## 10. Run the build
+
+![screen-shot-run-the-build](screen-shot/Screenshot-run-the-build.png)
